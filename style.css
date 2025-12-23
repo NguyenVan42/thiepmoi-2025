@@ -17,6 +17,7 @@
         }
 
         .snowflake {
+            pointer-events: none;
             position: absolute;
             top: -10px;
             color: white;
@@ -66,6 +67,8 @@
         }
 
         .card-inner::before {
+             z-index: 0;
+             pointer-events: none;
             content: '';
             position: absolute;
             top: -50%;
@@ -75,6 +78,10 @@
             background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
             animation: shimmer 3s ease-in-out infinite;
         }
+.card-inner > * {
+    position: relative;
+    z-index: 1;
+}
 
         @keyframes shimmer {
             0%, 100% {
@@ -173,7 +180,7 @@
             width: 100px;
             height: 3px;
             background: linear-gradient(90deg, transparent, #c92a2a, transparent);
-            margin: 30px auto;
+            margin: 10px auto;
             animation: expand 1s ease-out 1.4s backwards;
         }
 
@@ -204,14 +211,13 @@
         }
 
         .message {
-            margin: 25px 0;
+            margin: 5px 0;
             font-size: 20px;
             color: #2b8a3e;
         }
 
         .details {
             background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
-            padding: 25px;
             border-radius: 15px;
             margin: 25px 0;
             border: 2px solid #ffc9c9;
@@ -262,4 +268,29 @@
             50% {
                 opacity: 0.3;
             }
+        }
+
+        .map-button {
+            background: linear-gradient(135deg, #51cf66 0%, #2b8a3e 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(43, 138, 62, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 2s backwards;
+            margin-top: 10px;
+        }
+
+        .map-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(43, 138, 62, 0.5);
+            background: linear-gradient(135deg, #69db7c 0%, #37b24d 100%);
+        }
+
+        .map-button:active {
+            transform: translateY(-1px);
         }

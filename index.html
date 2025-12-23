@@ -3,10 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="style.css" />
     <!-- <script src="./app.js" defer></script> -->
 
-    <<title>Thiệp Mời Giáng Sinh</title>
+    <title>Thiệp Mời Giáng Sinh</title>
   </head>
   <body>
     <div class="container">
@@ -27,7 +28,7 @@
                 <div class="content">
                     <p class="message">
                         <span class="stars">✨</span>
-                        Kính mời mọi người tới dự tiệc Giáng Sinh nhà Nguyên
+                        Kính mời mọi người tham dự tiệc Giáng Sinh nhà Nguyên
                         <span class="stars">✨</span>
                     </p>
 
@@ -39,16 +40,32 @@
                             <strong>📍 Địa điểm:</strong> Nhà của Nguyên
                         </div>
                         <div class="detail-item">
-                            <strong>🎁 gifcode:</strong> Thích gì được đó!
+                            <strong>🎁 Gifcode:</strong> Thích gì được đó!
                         </div>
                     </div>
-                    <span>Cám ơn mọi người!</p>
+
+                    <button class="map-button" onclick="openMap()" id="mapButton">
+                        🗺️ Xem bản đồ nhà Nguyên
+                    </button>
+
+                    <p style="margin-top: 20px;">
+                        Cảm ơn mọi người!<br>
+                        <strong style="color: #c92a2a;">Mong được gặp mọi người! 🎅</strong>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Địa chỉ nhà Nguyên
+        function openMap() {
+    // Thay link này bằng vị trí nhà bạn
+    window.open(
+        "https://maps.app.goo.gl/g6GCtqhbthFgY7Yb8",
+        "_blank"
+    );
+}
         // Tạo hiệu ứng tuyết rơi
         function createSnowflake() {
             const snowflake = document.createElement('div');
