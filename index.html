@@ -6,39 +6,19 @@
   <title>VietQR — Tạo mã QR thanh toán</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
-  <style>
-    /* Loader trong khi verify token */
-    #appLoader {
-      position: fixed; inset: 0;
-      background: #0D0D0D;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 16px; z-index: 9999;
-    }
-    #appLoader .spin {
-      width: 36px; height: 36px;
-      border: 3px solid #2A2A2A; border-top-color: #E53E3E;
-      border-radius: 50%; animation: spin .7s linear infinite;
-    }
-    #appLoader p { font-size: 13px; color: #6B6B6B; font-family: 'Be Vietnam Pro', sans-serif; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #appContent { display: none; }
-  </style>
-  <script src="auth_guard.min.js"></script>
+  <script>
+    // Auth guard — kiểm tra trước khi render trang
+    (function() {
+      const auth = sessionStorage.getItem('vqr_auth');
+      if (!auth) { window.location.replace('login.html'); }
+    })();
+  </script>
 </head>
 
-<!-- Loader: hiện khi đang verify token -->
-<div id="appLoader">
-  <div class="spin"></div>
-  <p>Đang xác thực…</p>
-</div>
-
-<!-- App content: ẩn cho đến khi token hợp lệ -->
-<div id="appContent">
 <header>
   <div class="logo-icon">🏦</div>
   <div style="display:flex;flex-direction:column;gap:3px;">
-    <div class="logo-text">Viet<span>QR</span> Generator</div>
+    <div class="logo-text"><span>QR</span> Generator</div>
     <div style="font-size:11px;color:var(--muted);font-weight:500;">
       Được phát triển bởi: <span style="color:var(--gold);font-weight:700;">Nguyễn Văn</span>
       &nbsp;·&nbsp;
@@ -257,8 +237,18 @@
   Dữ liệu không lưu trữ, hoàn toàn miễn phí.
 </footer>
 
+<script>
+(function() {
+  const auth = sessionStorage.getItem('vqr_auth');
 
+  if (!auth) {
+    const encoded = "bG9naW4uaHRtbA==";
+    const url = atob(encoded);
+    window.location.replace(url);
+  }
+})();
+</script>
   <script src="app.min.js"></script>
-</div><!-- /appContent -->
 </body>
 </html>
+
