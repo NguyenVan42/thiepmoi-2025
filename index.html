@@ -229,6 +229,25 @@
     }
     .btn-download:hover { border-color: var(--white); color: var(--white); }
 
+    /* ── EXPIRY ── */
+    .expiry-type-btn {
+      background: #1C1C1C; border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 6px; color: var(--muted); font-family: inherit;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      transition: all .2s; white-space: nowrap;
+    }
+    .expiry-type-btn:hover { border-color: #555; color: var(--light); }
+    .expiry-type-btn.active { background: #1a1200; border-color: #f0b429; color: #f0b429; }
+
+    .expiry-preset {
+      background: #1C1C1C; border: 1px solid var(--border); border-radius: 8px;
+      padding: 7px 12px; color: var(--muted); font-family: inherit;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all .2s;
+    }
+    .expiry-preset:hover { border-color: #f0b429; color: #f0b429; background: #1a1200; }
+    .expiry-preset.selected { background: #1a1200; border-color: #f0b429; color: #f0b429; }
+
     /* ── ERROR ── */
     .error-msg {
       display: none;
@@ -255,8 +274,15 @@
 
 <header>
   <div class="logo-icon">🏦</div>
-  <div class="logo-text">Viet<span>QR</span> Generator</div>
-  <div class="badge">Free &amp; Open</div>
+  <div style="display:flex;flex-direction:column;gap:3px;">
+    <div class="logo-text">Viet<span>QR</span> Generator</div>
+    <div style="font-size:11px;color:var(--muted);font-weight:500;">
+      Được phát triển bởi: <span style="color:var(--gold);font-weight:700;">Nguyên Văn</span>
+      &nbsp;·&nbsp;
+      Liên hệ: <a href="tel:0337520405" style="color:var(--gold);text-decoration:none;font-weight:700;">0337 520 405</a>
+    </div>
+  </div>
+  <div class="badge">Dùng thử &amp; trải nghiệm</div>
 </header>
 
 <main>
@@ -335,6 +361,43 @@
       </button>
     </div>
 
+    <!-- Thời hạn mã QR -->
+    <div class="field">
+      <label style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <span>⏱ Thời hạn mã QR</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span id="expiryToggleLabel" style="font-size:11px;font-weight:700;color:var(--muted);transition:color .2s;">TẮT</span>
+          <div id="expiryToggleWrap" onclick="toggleExpiry()" style="width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .3s;flex-shrink:0;">
+            <div id="expiryToggleThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 4px rgba(0,0,0,.4);"></div>
+          </div>
+        </div>
+      </label>
+      <div id="expirySettings" style="display:none;flex-direction:column;gap:10px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <button class="expiry-type-btn active" onclick="setExpiryType('duration')" id="btn-duration">⏳ Sau X phút</button>
+          <button class="expiry-type-btn" onclick="setExpiryType('fixed')" id="btn-fixed">🕐 Giờ cố định</button>
+          <button class="expiry-type-btn" onclick="setExpiryType('custom')" id="btn-custom">✏️ Tùy chỉnh</button>
+        </div>
+        <div id="expiry-duration" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="expiry-preset" onclick="setDuration(15)">15 phút</button>
+          <button class="expiry-preset" onclick="setDuration(30)">30 phút</button>
+          <button class="expiry-preset" onclick="setDuration(60)">1 giờ</button>
+          <button class="expiry-preset" onclick="setDuration(120)">2 giờ</button>
+          <button class="expiry-preset" onclick="setDuration(480)">8 giờ</button>
+          <button class="expiry-preset" onclick="setDuration(1440)">1 ngày</button>
+        </div>
+        <div id="expiry-fixed" style="display:none;">
+          <input type="time" id="fixedTimeInput" value="18:00" style="width:100%;background:#1C1C1C;border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--white);font-family:inherit;font-size:15px;outline:none;transition:border-color .2s;" oninput="updateExpiryPreview()"/>
+          <p style="font-size:11px;color:var(--muted);margin-top:6px;">Mã sẽ hết hạn lúc giờ này trong ngày hôm nay.</p>
+        </div>
+        <div id="expiry-custom" style="display:none;position:relative;">
+          <input type="number" id="customMinutes" placeholder="Nhập số phút..." min="1" max="43200" style="width:100%;background:#1C1C1C;border:1px solid var(--border);border-radius:10px;padding:10px 50px 10px 16px;color:var(--white);font-family:inherit;font-size:15px;outline:none;transition:border-color .2s;" oninput="updateExpiryPreview()"/>
+          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--muted);">phút</span>
+        </div>
+        <div id="expiryPreview" style="background:#1a1200;border:1px solid #5a3e00;border-radius:8px;padding:9px 14px;font-size:12px;color:#f0b429;display:none;"></div>
+      </div>
+    </div>
+
     <button class="btn-generate" id="btnGenerate" onclick="generateQR()">
       <div class="spinner" id="spinner"></div>
       <span id="btnText">⚡ Tạo mã QR</span>
@@ -365,7 +428,26 @@
     </div>
 
     <div class="qr-image-wrap" id="qrImageWrap">
-      <img id="qrImage" src="" alt="Mã QR thanh toán"/>
+      <!-- Countdown bar -->
+      <div id="countdownWrap" style="display:none;width:240px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+          <span style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.4px;">⏱ HẾT HẠN SAU</span>
+          <span id="countdownText" style="font-size:14px;font-weight:800;color:#f0b429;font-variant-numeric:tabular-nums;letter-spacing:1px;">--:--:--</span>
+        </div>
+        <div style="width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+          <div id="countdownBar" style="height:100%;background:#f0b429;border-radius:2px;width:100%;transition:width 1s linear,background .5s;"></div>
+        </div>
+      </div>
+
+      <!-- QR image với expired overlay -->
+      <div style="position:relative;display:inline-block;">
+        <img id="qrImage" src="" alt="Mã QR thanh toán" style="transition:filter .5s,opacity .5s;"/>
+        <div id="expiredOverlay" style="display:none;position:absolute;inset:0;border-radius:12px;background:rgba(13,13,13,.88);backdrop-filter:blur(3px);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+          <span style="font-size:36px;">⛔</span>
+          <span style="font-size:14px;font-weight:800;color:var(--red);letter-spacing:.5px;">MÃ ĐÃ HẾT HẠN</span>
+          <span style="font-size:11px;color:var(--muted);text-align:center;padding:0 16px;">Vui lòng tạo mã QR mới</span>
+        </div>
+      </div>
     </div>
 
     <div class="qr-info" id="qrInfo">
@@ -399,7 +481,7 @@
 
 <footer>
   Powered by <a href="https://vietqr.io" target="_blank">VietQR.io</a> API &mdash;
-  Dữ liệu không lưu trữ, hoàn toàn miễn phí.
+  Dữ liệu không lưu trữ, kết nối an toàn.
 </footer>
 
 <script>
@@ -604,6 +686,7 @@
   // ────────────────────────────────
   async function generateQR() {
     clearError();
+    stopCountdown(); // reset đếm ngược cũ
     const bankBin     = document.getElementById('bankSelect').value;
     const accountNo   = document.getElementById('accountNo').value.trim();
     const accountName = document.getElementById('accountName').value.trim().toUpperCase();
@@ -681,6 +764,13 @@
     } else { rowContent.style.display = 'none'; }
 
     document.getElementById('btnDownload').style.display = 'flex';
+
+    // ── Khởi động đếm ngược nếu bật thời hạn ──
+    stopCountdown();
+    const expiryMs = getExpiryMs();
+    if (expiryEnabled && expiryMs && expiryMs > 0) {
+      startCountdown(expiryMs);
+    }
   }
 
   function downloadQR() {
@@ -702,7 +792,160 @@
   }
   function clearError() { document.getElementById('errorMsg').style.display = 'none'; }
 
-  document.addEventListener('keydown', e => { if (e.key === 'Enter') generateQR(); });
+  // ────────────────────────────────
+  // EXPIRY LOGIC
+  // ────────────────────────────────
+  let expiryEnabled  = false;
+  let expiryType     = 'duration'; // 'duration' | 'fixed' | 'custom'
+  let selectedDurationMin = 30;    // default preset
+  let countdownTimer = null;
+  let expiryAt       = null;       // Date object
+
+  function toggleExpiry() {
+    expiryEnabled = !expiryEnabled;
+    const wrap   = document.getElementById('expiryToggleWrap');
+    const thumb  = document.getElementById('expiryToggleThumb');
+    const label  = document.getElementById('expiryToggleLabel');
+    const panel  = document.getElementById('expirySettings');
+
+    if (expiryEnabled) {
+      wrap.style.background  = '#f0b429';
+      thumb.style.transform  = 'translateX(20px)';
+      label.style.color      = '#f0b429';
+      label.textContent      = 'BẬT';
+      panel.style.display    = 'flex';
+      // Chọn mặc định preset 30 phút
+      document.querySelectorAll('.expiry-preset').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('.expiry-preset')[1]?.classList.add('selected');
+      updateExpiryPreview();
+    } else {
+      wrap.style.background  = 'var(--border)';
+      thumb.style.transform  = 'translateX(0px)';
+      label.style.color      = 'var(--muted)';
+      label.textContent      = 'TẮT';
+      panel.style.display    = 'none';
+    }
+  }
+
+  function setExpiryType(type) {
+    expiryType = type;
+    ['duration','fixed','custom'].forEach(t => {
+      document.getElementById(`expiry-${t}`).style.display = t === type ? (t === 'duration' ? 'flex' : 'block') : 'none';
+      document.getElementById(`btn-${t}`).classList.toggle('active', t === type);
+    });
+    updateExpiryPreview();
+  }
+
+  function setDuration(min) {
+    selectedDurationMin = min;
+    document.querySelectorAll('.expiry-preset').forEach(b => b.classList.remove('selected'));
+    event.target.classList.add('selected');
+    updateExpiryPreview();
+  }
+
+  function getExpiryMs() {
+    if (!expiryEnabled) return null;
+    if (expiryType === 'duration') {
+      return selectedDurationMin * 60 * 1000;
+    } else if (expiryType === 'fixed') {
+      const val = document.getElementById('fixedTimeInput').value;
+      if (!val) return null;
+      const [h, m] = val.split(':').map(Number);
+      const target = new Date();
+      target.setHours(h, m, 0, 0);
+      const diff = target - Date.now();
+      return diff > 0 ? diff : null;
+    } else {
+      const min = parseInt(document.getElementById('customMinutes').value);
+      return min > 0 ? min * 60 * 1000 : null;
+    }
+  }
+
+  function formatDuration(ms) {
+    if (ms <= 0) return '00:00:00';
+    const totalSec = Math.floor(ms / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+  }
+
+  function updateExpiryPreview() {
+    const preview = document.getElementById('expiryPreview');
+    const ms = getExpiryMs();
+    if (ms && ms > 0) {
+      preview.style.display = 'block';
+      const expireTime = new Date(Date.now() + ms);
+      preview.textContent = `⏰ Mã sẽ hết hạn lúc ${expireTime.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit',second:'2-digit'})} — còn ${formatDuration(ms)}`;
+    } else {
+      preview.style.display = ms === null && expiryType === 'fixed' ? 'block' : 'none';
+      if (ms === null && expiryType === 'fixed') preview.textContent = '⚠ Giờ đã qua — vui lòng chọn giờ trong tương lai';
+    }
+  }
+
+  function startCountdown(totalMs) {
+    // Clear timer cũ nếu có
+    stopCountdown();
+
+    expiryAt = Date.now() + totalMs;
+    const wrap = document.getElementById('countdownWrap');
+    wrap.style.display = 'block';
+
+    function tick() {
+      const remaining = expiryAt - Date.now();
+      if (remaining <= 0) {
+        expireQR();
+        return;
+      }
+      // Text
+      document.getElementById('countdownText').textContent = formatDuration(remaining);
+      // Bar
+      const pct = Math.max(0, (remaining / totalMs) * 100);
+      const bar = document.getElementById('countdownBar');
+      bar.style.width = pct + '%';
+      // Màu sắc theo % còn lại
+      if (pct > 50)      bar.style.background = '#f0b429';
+      else if (pct > 20) bar.style.background = '#e8821a';
+      else               bar.style.background = 'var(--red)';
+      // Text đỏ khi gần hết
+      document.getElementById('countdownText').style.color = pct <= 20 ? 'var(--red)' : '#f0b429';
+
+      countdownTimer = setTimeout(tick, 1000);
+    }
+    tick();
+  }
+
+  function stopCountdown() {
+    if (countdownTimer) { clearTimeout(countdownTimer); countdownTimer = null; }
+    document.getElementById('countdownWrap').style.display = 'none';
+    document.getElementById('countdownText').textContent = '--:--:--';
+    document.getElementById('countdownBar').style.width = '100%';
+    document.getElementById('countdownBar').style.background = '#f0b429';
+    // Ẩn expired overlay nếu còn hiện
+    document.getElementById('expiredOverlay').style.display = 'none';
+    const img = document.getElementById('qrImage');
+    img.style.filter  = 'none';
+    img.style.opacity = '1';
+  }
+
+  function expireQR() {
+    stopCountdown();
+    // Hiện overlay hết hạn
+    const overlay = document.getElementById('expiredOverlay');
+    overlay.style.display = 'flex';
+    // Mờ ảnh QR
+    const img = document.getElementById('qrImage');
+    img.style.filter  = 'blur(6px) grayscale(1)';
+    img.style.opacity = '0.25';
+    // Ẩn nút tải
+    document.getElementById('btnDownload').style.display = 'none';
+    // Hiện lại countdown wrap với thông báo hết hạn
+    const wrap = document.getElementById('countdownWrap');
+    wrap.style.display = 'block';
+    document.getElementById('countdownText').textContent = 'HẾT HẠN';
+    document.getElementById('countdownText').style.color = 'var(--red)';
+    document.getElementById('countdownBar').style.width = '0%';
+  }
 
   // ── Init ──
   loadBanks();
