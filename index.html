@@ -3,22 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QR — Tạo mã QR thanh toán</title>
+  <title>VietQR — Tạo mã QR thanh toán</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
+  <script>
+    // Auth guard — kiểm tra trước khi render trang
+    (function() {
+      const auth = sessionStorage.getItem('vqr_auth');
+      if (!auth) { window.location.replace('login.html'); }
+    })();
+  </script>
 </head>
 
 <header>
   <div class="logo-icon">🏦</div>
   <div style="display:flex;flex-direction:column;gap:3px;">
-    <div class="logo-text"><span>QR</span> Generator</div>
+    <div class="logo-text">Viet<span>QR</span> Generator</div>
     <div style="font-size:11px;color:var(--muted);font-weight:500;">
-      Được phát triển bởi: <span style="color:var(--gold);font-weight:700;">Nguyên Văn</span>
+      Được phát triển bởi: <span style="color:var(--gold);font-weight:700;">Nguyễn Văn</span>
       &nbsp;·&nbsp;
       Liên hệ: <a href="tel:0337520405" style="color:var(--gold);text-decoration:none;font-weight:700;">0337 520 405</a>
     </div>
   </div>
   <div class="badge">Dùng thử &amp; trải nghiệm</div>
+  <button onclick="logout()" style="
+    background:transparent;border:1px solid #3a1a1a;border-radius:8px;
+    padding:5px 12px;color:var(--muted);font-family:inherit;
+    font-size:11px;font-weight:700;cursor:pointer;
+    letter-spacing:.4px;text-transform:uppercase;
+    transition:all .2s;margin-left:8px;
+  " onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'"
+     onmouseout="this.style.borderColor='#3a1a1a';this.style.color='var(--muted)'">
+    ⎋ Đăng xuất
+  </button>
 </header>
 
 <main>
@@ -217,7 +234,7 @@
 
 <footer>
   Powered by <a href="https://vietqr.io" target="_blank">VietQR.io</a> API &mdash;
-  Dữ liệu không lưu trữ, kết nối an toàn.
+  Dữ liệu không lưu trữ, hoàn toàn miễn phí.
 </footer>
 
 
